@@ -353,9 +353,48 @@ platformio device monitor --baud 115200
 
 ---
 
+
+---
+
+## 13. 版本管理与发布
+
+### 13.1 版本命名规则
+
+```
+v<主版本号>.<次版本号>_<日期>
+例如: v1.0_2026-07-14
+```
+
+### 13.2 一键发布脚本
+
+```powershell
+.\publish.ps1 -Version "v1.1" -Message "修复进纸电机丢步"
+```
+
+脚本自动完成：`git add` → `git commit` → `git tag` → `git push`
+
+### 13.3 GitHub 仓库
+
+https://github.com/qihangpeng580-ui/grbl-esp32
+
+每个版本以 Git Tag 标记，可在 GitHub Releases 页面下载任意历史版本。
+
+### 13.4 版本历史
+
+| 版本 | 日期 | 说明 |
+|------|------|------|
+| v1.0 | 2026-07-14 | 初始版本：Grbl_Esp32 定制版 + 进纸电机 PaperFeed 模块 |
+
+### 13.5 代理配置
+
+Git 已配置代理 `127.0.0.1:7890`，推送需要 VPN 开启。
+
+---
+
 *文档更新日期: 2026-07-14*
 ---
 
 *文档生成日期: 2026-07-14*
 *工作区路径: `D:\Esp32\Grbl_Esp32修改 - 副本 - 副本\Grbl_Esp32`*
+
 
