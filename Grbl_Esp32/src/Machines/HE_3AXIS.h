@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 // clang-format off
 
 /*
@@ -32,7 +32,7 @@
 #endif
 
 #define SPINDLE_TYPE            SpindleType::LASER
-#define LASER_OUTPUT_PIN      GPIO_NUM_2
+#define LASER_OUTPUT_PIN      GPIO_NUM_21
 
 #define MACHINE_NAME            "HE_3AXIS"
 
@@ -55,4 +55,6 @@
 #define PAPER_FEED_STEP_PIN     GPIO_NUM_13
 #define PAPER_FEED_DIR_PIN      GPIO_NUM_15
 #define PAPER_FEED_DISABLE_PIN  GPIO_NUM_25   // ???? STEPPERS_DISABLE_PIN
+#define SERVO_PIN               GPIO_NUM_2    // ?? IO2
+
 

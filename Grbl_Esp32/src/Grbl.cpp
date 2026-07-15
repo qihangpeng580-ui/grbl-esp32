@@ -48,6 +48,9 @@ void grbl_init() {
 #ifdef PAPER_FEED_STEP_PIN
     paper_feed_init();
 #endif
+#ifdef SERVO_PIN
+    servo_init();
+#endif
     // Initialize system state.
 #ifdef FORCE_INITIALIZATION_ALARM
     // Force Grbl into an ALARM state upon a power-cycle or hard reset.

@@ -50,6 +50,7 @@ enum class ModalGroup : uint8_t {
     MM9  = 14,  // [M56] Override control
     MM10 = 15,  // [M62, M63, M64, M65, M67, M68] User Defined http://linuxcnc.org/docs/html/gcode/overview.html#_modal_groups
     MM11 = 16,  // [M100, M101, M102] Paper feed
+    MM12 = 17,  // [M103] Servo control
 };
 
 // Command actions for within execution-type modal groups (motion, stopping, non-modal). Used
@@ -320,6 +321,7 @@ typedef struct {
     gc_values_t  values;
     GCodeCoolant coolant;
     uint8_t      paper_feed_cmd;  // 0=none, 100=M100 forward, 101=M101 backward, 102=M102 stop
+    uint8_t      servo_cmd;      // 0=none, 103=M103 set angle
 } parser_block_t;
 
 enum class AxisCommand : uint8_t {

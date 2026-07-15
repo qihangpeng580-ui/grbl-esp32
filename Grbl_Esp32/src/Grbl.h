@@ -51,6 +51,9 @@ const char* const GRBL_VERSION_BUILD = "20211103";
 #ifdef PAPER_FEED_STEP_PIN
 #    include "PaperFeed.h"
 #endif
+#ifdef SERVO_PIN
+#    include "ServoControl.h"
+#endif
 #include "Limits.h"
 #include "MotionControl.h"
 #include "Protocol.h"
