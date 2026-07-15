@@ -384,6 +384,7 @@ https://github.com/qihangpeng580-ui/grbl-esp32
 | 版本 | 日期 | 说明 |
 |------|------|------|
 | v1.0 | 2026-07-14 | 初始版本：Grbl_Esp32 定制版 + 进纸电机 PaperFeed 模块 |
+| v1.1 | 2026-07-15 | 新增舵机控制模块 ServoControl（M103），GPIO2 输出 PWM |
 
 ### 13.5 代理配置
 
@@ -391,7 +392,54 @@ Git 已配置代理 `127.0.0.1:7890`，推送需要 VPN 开启。
 
 ---
 
-*文档更新日期: 2026-07-14*
+## 14. 舵机控制 (Servo Control)
+
+### 14.1 概述
+
+独立舵机控制模块，用于纸张展平辅助。不进 Planner、不进轴数组，与 CoreXY/PaperFeed 零耦合。
+
+### 14.2 相关文件
+
+| 文件 | 说明 |
+|------|------|
+| Grbl_Esp32/src/ServoControl.h | 舵机控制头文件 |
+| Grbl_Esp32/src/ServoControl.cpp | LEDC 50Hz PWM 实现 |
+
+修改文件：src/Grbl.h、src/Grbl.cpp、src/GCode.h、src/GCode.cpp（均用 #ifdef SERVO_PIN 包裹）。
+
+### 14.3 引脚
+
+| 功能 | GPIO |
+|------|------|
+| 舵机 PWM | 2（原 LASER_OUTPUT_PIN，激光已改 GPIO21） |
+
+### 14.4 G 代码命令
+
+| 命令 | 参数 | 示例 | 说明 |
+|------|------|------|------|
+| M103 | P角度 F转速 | M103 P90 F30 | 舵机转到 P 度，转速 F 度/秒 |
+
+默认参数（ServoControl.h）：
+- SCTL_PULSE_FREQ = 50（Hz）
+- SCTL_MIN_PULSE_US = 500
+- SCTL_MAX_PULSE_US = 2500
+- SCTL_DEFAULT_SPEED = 180（度/秒）
+
+### 14.5 控制逻辑
+
+```
+M103 P90 F30 -> servo_set_angle(90, 30)
+  -> step_deg = 30 * 0.02 = 0.6 度/步
+  -> 逐步 ledcWrite 更新 PWM
+  -> F=0 瞬移，F>0 匀速渐变
+```
+
+LEDC 硬件 PWM 50Hz，不受 CPU 中断影响。
+
+
+---
+
+*文档更新日期: 2026-07-15*
 ---
 
 *文档生成日期: 2026-07-14*
