@@ -22,6 +22,9 @@
 #include <WiFi.h>
 
 void grbl_init() {
+    disableCore0WDT();
+    disableCore1WDT();
+    esp_task_wdt_init(30, false);  // 30s timeout, don't panic on timeout
 #ifdef USE_I2S_OUT
     i2s_out_init();  // The I2S out must be initialized before it can access the expanded GPIO port
 #endif

@@ -21,3 +21,8 @@ __vm/
 *.suo
 Grbl_Esp32.ino.cpp
 /packages
+
+temp_patch1.patch
+update_doc.py
+*.py
+.pio/

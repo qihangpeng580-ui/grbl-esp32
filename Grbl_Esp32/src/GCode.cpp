@@ -573,6 +573,11 @@ Error gc_execute_line(char* line, uint8_t client) {
                         gc_block.servo_cmd = (uint8_t)int_value;
                         mg_word_bit = ModalGroup::MM12;
                         break;
+                    case 104:  // M104 - Servo reset to safe angle
+                    case 105:  // M105 - Servo stop
+                        gc_block.servo_cmd = (uint8_t)int_value;
+                        mg_word_bit = ModalGroup::MM12;
+                        break;
 #endif
                     default:
                         FAIL(Error::GcodeUnsupportedCommand);  // [Unsupported M command]
@@ -868,12 +873,20 @@ Error gc_execute_line(char* line, uint8_t client) {
         bit_false(value_words, bit(GCodeWord::P));
         bit_false(value_words, bit(GCodeWord::F));
     }
+    if (gc_block.servo_cmd == 104 || gc_block.servo_cmd == 105) {
+        bit_false(value_words, bit(GCodeWord::P));
+        bit_false(value_words, bit(GCodeWord::F));
+    }
 #endif
 #ifdef SERVO_PIN
     if (gc_block.servo_cmd == 103) {
         if (bit_isfalse(value_words, bit(GCodeWord::P))) {
             FAIL(Error::GcodeValueWordMissing);
         }
+        bit_false(value_words, bit(GCodeWord::P));
+        bit_false(value_words, bit(GCodeWord::F));
+    }
+    if (gc_block.servo_cmd == 104 || gc_block.servo_cmd == 105) {
         bit_false(value_words, bit(GCodeWord::P));
         bit_false(value_words, bit(GCodeWord::F));
     }
@@ -1497,6 +1510,12 @@ Error gc_execute_line(char* line, uint8_t client) {
 #ifdef SERVO_PIN
     if (gc_block.servo_cmd == 103) {
         servo_set_angle(gc_block.values.p, gc_block.values.f);
+    }
+    if (gc_block.servo_cmd == 104) {
+        servo_reset();
+    }
+    if (gc_block.servo_cmd == 105) {
+        servo_stop();
     }
 #endif
     // [9. Override control ]: NOT SUPPORTED. Always enabled. Except for a Grbl-only parking control.

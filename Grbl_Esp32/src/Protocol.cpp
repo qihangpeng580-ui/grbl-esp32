@@ -1,4 +1,4 @@
-/*
+﻿/*
   Protocol.cpp - controls Grbl execution protocol and procedures
   Part of Grbl
 
@@ -198,6 +198,7 @@ void protocol_main_loop() {
                 motors_set_disable(true);
             }
         }
+        esp_task_wdt_reset();  // Feed the task watchdog to prevent reset
     }
     return; /* Never reached */
 }
