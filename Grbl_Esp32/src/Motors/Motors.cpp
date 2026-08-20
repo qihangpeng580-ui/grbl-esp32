@@ -467,6 +467,11 @@ void motors_read_settings() {
 // use this to tell all the motors what the current homing mode is
 // They can use this to setup things like Stall
 uint8_t motors_set_homing_mode(uint8_t homing_mask, bool isHoming) {
+#ifdef Z_MOTOR_UART
+    // ZDT Z has no limit switch in this machine. Never pass Z into the
+    // hardware homing cycle, even if an old NVS setting still contains Z.
+    homing_mask &= ~bit(Z_AXIS);
+#endif
     uint8_t can_home = 0;
     auto    n_axis   = number_axis->get();
     for (uint8_t axis = X_AXIS; axis < n_axis; axis++) {
