@@ -54,6 +54,9 @@ void grbl_init() {
 #ifdef SERVO_PIN
     servo_init();
 #endif
+#ifdef SERVO_PIN2
+    servo2_init();
+#endif
     // Initialize system state.
 #ifdef FORCE_INITIALIZATION_ALARM
     // Force Grbl into an ALARM state upon a power-cycle or hard reset.

@@ -575,6 +575,9 @@ Error gc_execute_line(char* line, uint8_t client) {
                         break;
                     case 104:  // M104 - Servo reset to safe angle
                     case 105:  // M105 - Servo stop
+                    case 106:  // M106 - Servo2 set angle
+                    case 107:  // M107 - Servo2 reset
+                    case 108:  // M108 - Servo2 stop
                         gc_block.servo_cmd = (uint8_t)int_value;
                         mg_word_bit = ModalGroup::MM12;
                         break;
@@ -873,20 +876,20 @@ Error gc_execute_line(char* line, uint8_t client) {
         bit_false(value_words, bit(GCodeWord::P));
         bit_false(value_words, bit(GCodeWord::F));
     }
-    if (gc_block.servo_cmd == 104 || gc_block.servo_cmd == 105) {
+    if (gc_block.servo_cmd == 104 || gc_block.servo_cmd == 105 || gc_block.servo_cmd == 107 || gc_block.servo_cmd == 108) {
         bit_false(value_words, bit(GCodeWord::P));
         bit_false(value_words, bit(GCodeWord::F));
     }
 #endif
 #ifdef SERVO_PIN
-    if (gc_block.servo_cmd == 103) {
+    if (gc_block.servo_cmd == 103 || gc_block.servo_cmd == 106) {
         if (bit_isfalse(value_words, bit(GCodeWord::P))) {
             FAIL(Error::GcodeValueWordMissing);
         }
         bit_false(value_words, bit(GCodeWord::P));
         bit_false(value_words, bit(GCodeWord::F));
     }
-    if (gc_block.servo_cmd == 104 || gc_block.servo_cmd == 105) {
+    if (gc_block.servo_cmd == 104 || gc_block.servo_cmd == 105 || gc_block.servo_cmd == 107 || gc_block.servo_cmd == 108) {
         bit_false(value_words, bit(GCodeWord::P));
         bit_false(value_words, bit(GCodeWord::F));
     }
@@ -1516,6 +1519,15 @@ Error gc_execute_line(char* line, uint8_t client) {
     }
     if (gc_block.servo_cmd == 105) {
         servo_stop();
+    }
+    if (gc_block.servo_cmd == 106) {
+        servo2_set_angle(gc_block.values.p, gc_block.values.f);
+    }
+    if (gc_block.servo_cmd == 107) {
+        servo2_reset();
+    }
+    if (gc_block.servo_cmd == 108) {
+        servo2_stop();
     }
 #endif
     // [9. Override control ]: NOT SUPPORTED. Always enabled. Except for a Grbl-only parking control.

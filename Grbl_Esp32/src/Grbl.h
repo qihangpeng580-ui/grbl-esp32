@@ -63,6 +63,7 @@ const char* const GRBL_VERSION_BUILD = "20211103";
 #include "Pins.h"
 #include "Spindles/Spindle.h"
 #include "Motors/Motors.h"
+#include "Servo2Control.h"
 #include "Stepper.h"
 #include "Jog.h"
 #include "WebUI/InputBuffer.h"

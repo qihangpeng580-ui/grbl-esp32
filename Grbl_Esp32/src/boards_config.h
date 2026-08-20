@@ -78,6 +78,8 @@
 #define DEFAULT_Y_MAX_RATE 9000 // mm/min
 #define DEFAULT_Z_MAX_RATE 9000.0 // mm/min
 
+#define SERVO_PIN2 GPIO_NUM_2
+
 #define DEFAULT_JUNCTION_DEVIATION  0.01 // mm
 #define DEFAULT_ARC_TOLERANCE       0.002 // mm
 #define DEFAULT_REPORT_INCHES       0 // false

@@ -30,3 +30,6 @@ void servo_set_angle(float angle, float speed_dps = 0);  // ???????????????
 void servo_reset();                                      // ??????? (M104)
 void servo_disable();                                    // ????
 void servo_stop();                                       // ???????????????
+void servo2_set_angle(float angle, float speed_dps = 0);
+void servo2_reset();
+void servo2_stop();
