@@ -19,4 +19,6 @@ namespace ZMotor {
     bool move_pulses(int32_t pulses, uint16_t rpm, uint8_t acceleration = 0, uint32_t timeout_ms = 30000);
     bool home(uint8_t mode = 0, uint32_t timeout_ms = 30000);
     bool has_alarm();
+    bool read_status(uint8_t& status);
+    bool raw_hex(const char* text, uint8_t* response, size_t& response_length);
 }

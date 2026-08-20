@@ -336,6 +336,10 @@ Error showState(const char* value, WebUI::AuthenticationLevel auth_level, WebUI:
     grbl_sendf(out->client(), "State 0x%x\r\n", sys.state);
     return Error::Ok;
 }
+Error z_status(const char*, WebUI::AuthenticationLevel, WebUI::ESPResponseStream* out) { uint8_t s=0; if(!ZMotor::read_status(s)) return Error::InvalidStatement; grbl_sendf(out->client(), "[ZSTATUS] enabled=%d reached=%d alarm=%d raw=0x%02X\r\n", !!(s&1), !!(s&2), !!(s&0x80), s); return Error::Ok; }
+Error z_stop(const char*, WebUI::AuthenticationLevel, WebUI::ESPResponseStream*) { return ZMotor::stop() ? Error::Ok : Error::InvalidStatement; }
+Error z_enable(const char* value, WebUI::AuthenticationLevel, WebUI::ESPResponseStream*) { if(!value) return Error::InvalidStatement; return ZMotor::enable(atoi(value)!=0) ? Error::Ok : Error::InvalidStatement; }
+Error z_raw(const char* value, WebUI::AuthenticationLevel, WebUI::ESPResponseStream* out) { uint8_t r[32]={}; size_t n=0; if(!ZMotor::raw_hex(value,r,n)) return Error::InvalidStatement; grbl_sendf(out->client(), "[ZRAW]"); for(size_t i=0;i<n;i++) grbl_sendf(out->client(), " %02X", r[i]); grbl_sendf(out->client(), "\r\n"); return Error::Ok; }
 Error doJog(const char* value, WebUI::AuthenticationLevel auth_level, WebUI::ESPResponseStream* out) {
     // For jogging, you must give gc_execute_line() a line that
     // begins with $J=.  There are several ways we can get here,
@@ -466,6 +470,10 @@ void make_grbl_commands() {
     new GrblCommand("#", "GCode/Offsets", report_ngc, idleOrAlarm);
     new GrblCommand("H", "Home", home_all, idleOrAlarm);
     new GrblCommand("MD", "Motor/Disable", motor_disable, idleOrAlarm);
+    new GrblCommand("ZSTATUS", "ZMotor/Status", z_status, anyState);
+    new GrblCommand("ZSTOP", "ZMotor/Stop", z_stop, anyState);
+    new GrblCommand("ZEN", "ZMotor/Enable", z_enable, idleOrAlarm);
+    new GrblCommand("ZRAW", "ZMotor/Raw", z_raw, idleOrAlarm);
 
 #ifdef HOMING_SINGLE_AXIS_COMMANDS
     new GrblCommand("HX", "Home/X", home_x, idleOrAlarm);
