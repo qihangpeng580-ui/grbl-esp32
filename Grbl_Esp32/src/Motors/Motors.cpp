@@ -42,7 +42,6 @@
 #include "Dynamixel2.h"
 #include "TrinamicDriver.h"
 #include "TrinamicUartDriver.h"
-#include "../ZMotorConfig.h"
 
 Motors::Motor* myMotor[MAX_AXES][MAX_GANGED];  // number of axes (normal and ganged)
 void           init_motors() {
@@ -159,9 +158,7 @@ void           init_motors() {
 
     if (n_axis >= 3) {
         // this WILL be done better with settings
-#ifdef Z_MOTOR_UART
-        myMotor[Z_AXIS][0] = new Motors::Nullmotor(Z_AXIS);
-#elif defined(Z_TRINAMIC_DRIVER)
+#ifdef Z_TRINAMIC_DRIVER
 #    if (Z_TRINAMIC_DRIVER == 2130 || Z_TRINAMIC_DRIVER == 5160)
         {
             myMotor[Z_AXIS][0] =
@@ -467,11 +464,6 @@ void motors_read_settings() {
 // use this to tell all the motors what the current homing mode is
 // They can use this to setup things like Stall
 uint8_t motors_set_homing_mode(uint8_t homing_mask, bool isHoming) {
-#ifdef Z_MOTOR_UART
-    // ZDT Z has no limit switch in this machine. Never pass Z into the
-    // hardware homing cycle, even if an old NVS setting still contains Z.
-    homing_mask &= ~bit(Z_AXIS);
-#endif
     uint8_t can_home = 0;
     auto    n_axis   = number_axis->get();
     for (uint8_t axis = X_AXIS; axis < n_axis; axis++) {

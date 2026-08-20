@@ -11,7 +11,7 @@
 
 #define ENABLE_BLUETOOTH  // enable bluetooth
 
-// SD card disabled: GPIO18/19 are reserved for the Z-axis UART2 link.
+#define ENABLE_SD_CARD  // enable use of SD Card to run jobs
 
 //#define ENABLE_WIFI  //enable wifi
 
