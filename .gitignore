@@ -22,6 +22,9 @@ __vm/
 Grbl_Esp32.ino.cpp
 /packages
 
+# Local safety backups are intentionally not versioned.
+code_backups/pre-*/
+
 temp_patch1.patch
 update_doc.py
 *.py

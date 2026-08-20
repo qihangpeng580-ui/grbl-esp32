@@ -71,6 +71,7 @@ const char* const GRBL_VERSION_BUILD = "20211103";
 #include "WebUI/WebSettings.h"
 
 #include "UserOutput.h"
+#include "ZMotorUart.h"
 
 #include <Wire.h>
 
