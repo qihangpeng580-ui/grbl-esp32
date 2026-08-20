@@ -42,6 +42,7 @@
 #include "Dynamixel2.h"
 #include "TrinamicDriver.h"
 #include "TrinamicUartDriver.h"
+#include "../ZMotorConfig.h"
 
 Motors::Motor* myMotor[MAX_AXES][MAX_GANGED];  // number of axes (normal and ganged)
 void           init_motors() {
@@ -158,7 +159,9 @@ void           init_motors() {
 
     if (n_axis >= 3) {
         // this WILL be done better with settings
-#ifdef Z_TRINAMIC_DRIVER
+#ifdef Z_MOTOR_UART
+        myMotor[Z_AXIS][0] = new Motors::Nullmotor(Z_AXIS);
+#elif defined(Z_TRINAMIC_DRIVER)
 #    if (Z_TRINAMIC_DRIVER == 2130 || Z_TRINAMIC_DRIVER == 5160)
         {
             myMotor[Z_AXIS][0] =

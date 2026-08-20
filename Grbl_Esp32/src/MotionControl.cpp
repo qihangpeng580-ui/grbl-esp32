@@ -51,6 +51,24 @@ bool mc_line(float* target, plan_line_data_t* pl_data) {
         sys_pl_data_inflight = NULL;
         return submitted_result;
     }
+
+#ifdef Z_MOTOR_UART
+    // The external ZDT motor owns Z motion. Execute it before queueing the
+    // remaining planner axes; Z itself is represented by a Nullmotor below.
+    const float z_delta = target[Z_AXIS] - gc_state.position[Z_AXIS];
+    if (fabs(z_delta) > 0.0001f) {
+        protocol_buffer_synchronize();
+        const float steps_per_mm = axis_settings[Z_AXIS]->steps_per_mm->get();
+        const int32_t pulses = lroundf(z_delta * steps_per_mm);
+        const uint16_t rpm = uint16_t(MIN(3000.0f, MAX(1.0f, fabs(pl_data->feed_rate) * steps_per_mm / 3200.0f)));
+        if (!ZMotor::enable(true) || !ZMotor::move_pulses(pulses, rpm, 0)) {
+            grbl_msg_sendf(CLIENT_SERIAL, MsgLevel::Error, "Z motor move failed");
+            sys_rt_exec_alarm = ExecAlarm::AbortCycle;
+            sys_pl_data_inflight = NULL;
+            return submitted_result;
+        }
+    }
+#endif
     // NOTE: Backlash compensation may be installed here. It will need direction info to track when
     // to insert a backlash line motion(s) before the intended line motion and will require its own
     // plan_check_full_buffer() and check for system abort loop. Also for position reporting
