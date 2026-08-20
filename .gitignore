@@ -24,6 +24,7 @@ Grbl_Esp32.ino.cpp
 
 # Local safety backups are intentionally not versioned.
 code_backups/pre-*/
+code_backups/post-*/
 
 temp_patch1.patch
 update_doc.py
