@@ -77,9 +77,7 @@ static void cartesian_to_motors(float* position) {
 // Cycle mask is 0 unless the user sends a single axis command like $HZ
 // This will always return true to prevent the normal Grbl homing cycle
 bool user_defined_homing(uint8_t cycle_mask) {
-    grbl_sendf(CLIENT_SERIAL, "[DBG] user_defined_homing called, mask=%d
-
-", cycle_mask);
+    grbl_sendf(CLIENT_SERIAL, "[DBG] user_defined_homing called, mask=%d\r\n", cycle_mask);
     uint8_t n_cycle;                       // each home is a multi cycle operation approach, pulloff, approach.....
     float   target[MAX_N_AXIS] = { 0.0 };  // The target for each move in the cycle
     float   max_travel;
